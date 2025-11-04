@@ -49,7 +49,15 @@ export const PageTransitionLoader = () => {
     };
   }, [isTransitioning, handleMouseMove]);
 
-  const videoSrc = isMobile ? '/test/VDphone.webm' : '/test/vd.webm';
+import videoDesktop from '/public/test/vd.webm';
+import videoMobile from '/public/test/VDphone.webm';
+
+// ... (le reste du code existant)
+
+  useEffect(() => {
+    const videoSrc = isMobile ? videoMobile : videoDesktop;
+    const video = videoRef.current;
+// ... (le reste du code existant)
 
   return (
     <AnimatePresence>

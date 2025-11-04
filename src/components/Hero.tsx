@@ -149,14 +149,23 @@ export const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
             >
-              <Button 
-                size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-xl shadow-[var(--shadow-neon)] hover:shadow-[var(--shadow-glow)] transition-all duration-300 w-full sm:w-auto"
-                onClick={() => window.location.href = '/shop'}
-              >
-                Explorer la collection
-                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-              </Button>
+import { Link } from "react-router-dom";
+
+// ... (le reste du code existant)
+
+            <motion.div 
+              className="flex flex-wrap justify-center sm:justify-start gap-3 sm:gap-4"
+// ... (le reste du code existant)
+            >
+              <Link to="/shop">
+                <Button 
+                  size="lg" 
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-xl shadow-[var(--shadow-neon)] hover:shadow-[var(--shadow-glow)] transition-all duration-300 w-full sm:w-auto"
+                >
+                  Explorer la collection
+                  <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                </Button>
+              </Link>
               <Button 
                 size="lg" 
                 variant="outline"

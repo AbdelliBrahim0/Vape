@@ -126,11 +126,16 @@ const Index = () => {
       <Navbar />
       <Hero />
       <ScrollVelocity texts={['🧪NanoVapeLab', 'Pure-Vape-Science🔬']} velocity={100} className="custom-scroll-text" />
+import vapeLogo from '/public/test/VapeLogo.png';
+
+// ... (le reste du code existant)
+
       <div className="flex justify-center">
         <motion.img 
-          src="/test/VapeLogo.png" 
+          src={vapeLogo} 
           alt="Vape Logo" 
           className="h-64 object-contain" 
+// ... (le reste du code existant)
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
