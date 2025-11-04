@@ -10,16 +10,18 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   esbuild: {
-    jsx: 'automatic',
+    jsx: "automatic",
   },
+  // IMPORTANT pour GitHub Pages sous /Vape/
+  base: "/Vape/",
   plugins: [
     react({
-      jsxImportSource: '@emotion/react',
+      jsxImportSource: "@emotion/react",
       babel: {
-        plugins: ['@emotion/babel-plugin'],
+        plugins: ["@emotion/babel-plugin"],
       },
-    }), 
-    mode === "development" && componentTagger()
+    }),
+    mode === "development" && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -27,6 +29,6 @@ export default defineConfig(({ mode }) => ({
     },
   },
   define: {
-    'process.env': {}
-  }
+    "process.env": {},
+  },
 }));
