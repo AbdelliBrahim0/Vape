@@ -29,4 +29,29 @@ jobs:
         run: corepack enable
 
       - name: Setup PNPM
-        uses: pnpm/action-setu
+        uses: pnpm/action-setup@v2   # ← ICI (setup, pas setu)
+        with:
+          version: 9
+
+      - name: Install deps
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build Vite
+        run: pnpm build
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
