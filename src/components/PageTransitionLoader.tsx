@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePageTransition } from '@/contexts/PageTransitionContext';
 import { useIsMobile } from '@/hooks/use-mobile';
+import VDphone from '@/assets/test/VDphone.webm';
+import vd from '@/assets/test/vd.webm';
 
 export const PageTransitionLoader = () => {
   const { isTransitioning, skipTransition, endTransition } = usePageTransition();
@@ -9,7 +11,7 @@ export const PageTransitionLoader = () => {
   const [videoError, setVideoError] = useState(false);
   const isMobile = useIsMobile();
 
-  const videoSrc = isMobile ? '/test/VDphone.webm' : '/test/vd.webm';
+  const videoSrc = isMobile ? VDphone : vd;
 
   useEffect(() => {
     if (isTransitioning && videoRef.current) {

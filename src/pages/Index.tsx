@@ -5,6 +5,7 @@ import MagicBento from '@/components/MagicBento';
 import ScrollVelocity from '@/components/ScrollVelocity';
 import { Footer } from '@/components/Footer';
 import { ProductShowcaseCarousel } from '@/components/product-showcase-carousel';
+import VapeLogo from '@/assets/test/VapeLogo.png';
 // ... (autres imports)
 
 const Index = () => {
@@ -16,7 +17,7 @@ const Index = () => {
       <ScrollVelocity texts={['🧪NanoVapeLab', 'Pure-Vape-Science🔬']} velocity={100} className="custom-scroll-text" />
       <div className="flex justify-center">
         <motion.img 
-          src="/test/VapeLogo.png" 
+          src={VapeLogo} 
           alt="Vape Logo" 
           className="h-64 object-contain" 
           animate={{ y: [0, -10, 0] }}
