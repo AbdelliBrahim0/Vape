@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './CategorySection.css';
 import { motion } from 'framer-motion';
+import { useCart } from '@/contexts/CartContext';
 
 type Product = {
   id: string;
@@ -27,6 +28,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const { addToCart } = useCart();
 
   // Gestion du défilement automatique du slider
   useEffect(() => {
@@ -86,7 +88,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({
                     <h4>{product.name}</h4>
                     <div className="price-container">
                       <span className="price">{product.price.toFixed(2)}€</span>
-                      <button className="add-to-cart">+</button>
+                      <button className="add-to-cart" onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, image: product.image })}>+</button>
                     </div>
                   </div>
                 </motion.div>
@@ -135,7 +137,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({
                   <h4>{product.name}</h4>
                   <div className="price-container">
                     <span className="price">{product.price.toFixed(2)}€</span>
-                    <button className="add-to-cart">+</button>
+                    <button className="add-to-cart" onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, image: product.image })}>+</button>
                   </div>
                 </div>
               </motion.div>

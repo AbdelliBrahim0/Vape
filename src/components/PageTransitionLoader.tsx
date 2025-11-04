@@ -1,36 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePageTransition } from '@/contexts/PageTransitionContext';
 
 export const PageTransitionLoader = () => {
-  const { isTransitioning } = usePageTransition();
+  const { isTransitioning, skipTransition, endTransition } = usePageTransition();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoError, setVideoError] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // Redémarrer la vidéo à chaque fois que le loader apparaît
   useEffect(() => {
-    console.log('Transition state changed:', isTransitioning);
-    
     if (isTransitioning && videoRef.current) {
-      console.log('Initializing video playback...');
-      
-      // Réinitialiser l'état d'erreur
       setVideoError(false);
-      
-      // Réinitialiser et démarrer la vidéo
       videoRef.current.currentTime = 0;
-      
+      videoRef.current.playbackRate = 1.25; // Set playback speed to 1.25x
       const playPromise = videoRef.current.play();
-      
       if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            console.log('Video playback started successfully');
-          })
-          .catch(error => {
-            console.error('Erreur lors de la lecture de la vidéo:', error);
-            setVideoError(true);
-          });
+        playPromise.catch(error => {
+          console.error('Erreur lors de la lecture de la vidéo:', error);
+          setVideoError(true);
+        });
       }
     }
   }, [isTransitioning]);
@@ -40,34 +28,66 @@ export const PageTransitionLoader = () => {
     setVideoError(true);
   };
 
-  console.log('Rendering PageTransitionLoader, isTransitioning:', isTransitioning, 'videoError:', videoError);
+  const onVideoEnded = () => {
+    endTransition();
+  };
 
-  if (!isTransitioning) return null;
+  const handleMouseMove = useCallback((event: MouseEvent) => {
+    setMousePosition({ x: event.clientX, y: event.clientY });
+  }, []);
+
+  useEffect(() => {
+    if (isTransitioning) {
+      window.addEventListener('mousemove', handleMouseMove);
+    } else {
+      window.removeEventListener('mousemove', handleMouseMove);
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [isTransitioning, handleMouseMove]);
 
   return (
-    <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
-      <div className="w-full h-full max-w-4xl mx-auto flex items-center justify-center">
-        {videoError ? (
-          <div className="text-white text-center p-4">
-            <p className="text-xl font-bold mb-2">Erreur de chargement de la vidéo</p>
-            <p className="text-sm opacity-80">Le contenu de transition n'a pas pu être chargé.</p>
+    <AnimatePresence>
+      {isTransitioning && (
+        <motion.div
+          className="fixed inset-0 bg-black z-50 flex items-center justify-center cursor-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          onClick={skipTransition}
+        >
+          <div className="w-full h-full flex items-center justify-center">
+            {videoError ? (
+              <div className="text-white text-center p-4">
+                <p className="text-xl font-bold mb-2">Erreur de chargement de la vidéo</p>
+                <p className="text-sm opacity-80">Le contenu de transition n'a pas pu être chargé.</p>
+              </div>
+            ) : (
+              <video
+                ref={videoRef}
+                src="/test/vd.webm"
+                className="w-full h-full object-cover"
+                autoPlay
+                muted
+                playsInline
+                onError={handleVideoError}
+                onEnded={onVideoEnded}
+              />
+            )}
           </div>
-        ) : (
-          <video
-            ref={videoRef}
-            src="/test/vd.mp4"
-            className="w-full h-auto max-h-full object-contain"
-            autoPlay
-            muted
-            loop
-            playsInline
-            onError={handleVideoError}
-            onCanPlayThrough={() => console.log('Video can play through')}
+          <motion.div
+            className="absolute text-white text-lg font-semibold px-4 py-2 rounded-full bg-blue-800/70 backdrop-blur-sm pointer-events-none"
+            style={{ left: mousePosition.x + 15, top: mousePosition.y + 15 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.3 }}
           >
-            Votre navigateur ne supporte pas la lecture de vidéos.
-          </video>
-        )}
-      </div>
-    </div>
+            Cliquer n'importe où pour passer
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

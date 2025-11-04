@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useState } from 'react';
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
@@ -6,8 +7,10 @@ import ScrollVelocity from '@/components/ScrollVelocity';
 import { FeaturedProducts } from '@/components/FeaturedProducts';
 import { Footer } from '@/components/Footer';
 import CategorySection from '@/components/CategorySection';
-import { Star } from 'lucide-react';
+import { Star, ShoppingCart } from 'lucide-react';
 import { ProductShowcaseCarousel } from '@/components/product-showcase-carousel';
+import { useCart } from '@/contexts/CartContext';
+import { Button } from '@/components/ui/button';
 
 // Données des produits (à importer depuis Shop.tsx dans un vrai projet)
 const allProducts = [
@@ -117,12 +120,22 @@ const bestSellers = [
 ];
 
 const Index = () => {
+  const { addToCart } = useCart();
   return (
     <div className="min-h-screen">
       <Navbar />
       <Hero />
-      <ScrollVelocity texts={['NanoVapeLab', 'Pure-Vape-Science']} velocity={2} className="custom-scroll-text" />
-      <ProductShowcaseCarousel />
+      <ScrollVelocity texts={['🧪NanoVapeLab', 'Pure-Vape-Science🔬']} velocity={100} className="custom-scroll-text" />
+      <div className="flex justify-center">
+        <motion.img 
+          src="/test/VapeLogo.png" 
+          alt="Vape Logo" 
+          className="h-64 object-contain" 
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+      <ProductShowcaseCarousel className="-mt-16" />
       <div className="relative py-12 overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-3/4 h-0.5 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-30"></div>
@@ -186,18 +199,27 @@ const Index = () => {
                             <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                           ))}
                         </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span className="text-lg font-bold text-white">{product.price} TND</span>
+                        <div className="flex flex-col space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xl font-bold text-white">{product.price} TND</span>
                             {product.originalPrice && (
-                              <span className="ml-2 text-sm text-gray-400 line-through">
+                              <span className="text-sm text-gray-400 line-through">
                                 {product.originalPrice} TND
                               </span>
                             )}
                           </div>
-                          <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                            Voir
-                          </button>
+                          <Button 
+                            onClick={() => addToCart({
+                              id: product.id,
+                              name: product.name,
+                              price: product.price,
+                              image: product.image
+                            })}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2"
+                          >
+                            <ShoppingCart className="w-4 h-4" />
+                            Ajouter au panier
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -298,18 +320,27 @@ const Index = () => {
                       <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div>
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex items-center justify-between">
                       <span className="text-xl font-bold text-white">{product.price} TND</span>
                       {product.originalPrice && (
-                        <span className="ml-2 text-sm text-gray-400 line-through">
+                        <span className="text-sm text-gray-400 line-through">
                           {product.originalPrice} TND
                         </span>
                       )}
                     </div>
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
-                      Acheter
-                    </button>
+                    <Button 
+                      onClick={() => addToCart({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image: product.image
+                      })}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2"
+                    >
+                      <ShoppingCart className="w-4 h-4" />
+                      Ajouter au panier
+                    </Button>
                   </div>
                 </div>
               </div>

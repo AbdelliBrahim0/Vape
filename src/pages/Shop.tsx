@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ShoppingCart, Star, Search, SlidersHorizontal } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 import {
   Pagination,
   PaginationContent,
@@ -347,7 +348,8 @@ const Shop = () => {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 16;
+  const productsPerPage = 12;
+  const { addToCart } = useCart();
 
   const filteredProducts = allProducts
     .filter((product) => {
@@ -389,99 +391,7 @@ const Shop = () => {
         </div>
       </section>
 
-      {/* Nouveautés */}
-      <section className="py-12 bg-muted/20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Nouveautés</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {newArrivals.map((product) => (
-              <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="relative">
-                  <img 
-                    src={product.image} 
-                    alt={product.name} 
-                    className="w-full h-48 object-cover"
-                  />
-                  {product.badge && (
-                    <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                      {product.badge}
-                    </span>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-1 line-clamp-1">{product.name}</h3>
-                  <div className="flex items-center mb-2">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-lg font-bold">{product.price} TND</span>
-                      {product.originalPrice && (
-                        <span className="ml-2 text-sm text-gray-500 line-through">
-                          {product.originalPrice} TND
-                        </span>
-                      )}
-                    </div>
-                    <Button size="sm" className="bg-primary hover:bg-primary/90">
-                      <ShoppingCart className="w-4 h-4 mr-1" />
-                      Ajouter
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Meilleures ventes */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Meilleures ventes</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {bestSellers.map((product) => (
-              <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="relative">
-                  <img 
-                    src={product.image} 
-                    alt={product.name} 
-                    className="w-full h-48 object-cover"
-                  />
-                  {product.badge && (
-                    <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                      {product.badge}
-                    </span>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-1 line-clamp-1">{product.name}</h3>
-                  <div className="flex items-center mb-2">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-lg font-bold">{product.price} TND</span>
-                      {product.originalPrice && (
-                        <span className="ml-2 text-sm text-gray-500 line-through">
-                          {product.originalPrice} TND
-                        </span>
-                      )}
-                    </div>
-                    <Button size="sm" className="bg-primary hover:bg-primary/90">
-                      <ShoppingCart className="w-4 h-4 mr-1" />
-                      Ajouter
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
       {/* Filters */}
       <section className="pb-8">
@@ -571,13 +481,32 @@ const Shop = () => {
                   )}
 
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end justify-center pb-6">
-                    <Button 
-                      className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-[var(--shadow-neon)] transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500"
-                      disabled={!product.inStock}
-                      onClick={() => window.location.href = `/product/${product.id}`}
-                    >
-                      Voir détails
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button 
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-[var(--shadow-neon)] transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500"
+                        disabled={!product.inStock}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToCart({
+                            id: product.id.toString(),
+                            name: product.name,
+                            price: parseFloat(product.price),
+                            image: product.image,
+                            quantity: 1
+                          });
+                        }}
+                      >
+                        <ShoppingCart className="w-4 h-4 mr-1" />
+                        Ajouter
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        className="bg-background/80 hover:bg-background text-foreground font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500"
+                        onClick={() => window.location.href = `/product/${product.id}`}
+                      >
+                        Détails
+                      </Button>
+                    </div>
                   </div>
 
                   <div className="absolute top-0 left-0 w-20 h-20 border-l-2 border-t-2 border-primary/30 group-hover:border-primary transition-colors duration-500" />
@@ -603,14 +532,7 @@ const Shop = () => {
                     </div>
                   </div>
 
-                  {product.inStock && (
-                    <Button 
-                      className="w-full bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground font-bold border border-primary/30 hover:border-primary transition-all duration-300"
-                    >
-                      <ShoppingCart className="h-4 w-4 mr-2" />
-                      Ajouter au panier
-                    </Button>
-                  )}
+                  
                 </div>
               </Card>
             ))}

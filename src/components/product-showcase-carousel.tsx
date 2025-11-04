@@ -1,8 +1,7 @@
-"use client"
-
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { ChevronLeft, ChevronRight, Heart, ShoppingBag, Eye, Star, Zap } from "lucide-react"
+import { useCart } from '@/contexts/CartContext';
 // Utilisation du favicon.ico du dossier public
 
 interface Product {
@@ -94,6 +93,7 @@ export function ProductShowcaseCarousel() {
   const [selectedColor, setSelectedColor] = useState<Record<number, string>>({})
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const { addToCart } = useCart();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -126,7 +126,7 @@ export function ProductShowcaseCarousel() {
   return (
     <motion.div
       ref={containerRef}
-      className="mt-24 py-32 px-4 bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden"
+      className="px-4 bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden"
       style={{ opacity }}
     >
       <div className="max-w-7xl mx-auto">

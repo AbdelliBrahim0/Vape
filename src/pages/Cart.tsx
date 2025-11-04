@@ -4,45 +4,51 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, MessageSquareText } from "lucide-react";
+import { useCart } from '@/contexts/CartContext';
+import { OrderForm } from "@/components/OrderForm";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "NanoVape Pro X",
-      category: "Box Mod",
-      price: 149.99,
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1607434472257-d9f8e57a643d?w=200&h=200&fit=crop",
-    },
-    {
-      id: 2,
-      name: "Crystal Liquid 50ml",
-      category: "E-Liquide",
-      price: 24.99,
-      quantity: 2,
-      image: "https://images.unsplash.com/photo-1610056494249-5d7c6d0cb8f9?w=200&h=200&fit=crop",
-    },
-  ]);
-
+  const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
   const [promoCode, setPromoCode] = useState("");
+  const [showOrderForm, setShowOrderForm] = useState(false);
 
-  const updateQuantity = (id: number, delta: number) => {
-    setCartItems(items =>
-      items.map(item =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
-    );
+  const handleUpdateQuantity = (id: string, delta: number) => {
+    const item = cart.find(cartItem => cartItem.id === id);
+    if (item) {
+      updateQuantity(id, item.quantity + delta);
+    }
   };
 
-  const removeItem = (id: number) => {
-    setCartItems(items => items.filter(item => item.id !== id));
+  const handleRemoveItem = (id: string) => {
+    removeFromCart(id);
   };
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const handleSubmitOrder = (orderData: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    address: string;
+  }) => {
+    const { firstName, lastName, phone, address } = orderData;
+    const itemsList = cart
+      .map(item => `${item.quantity}x ${item.name} (${item.price} DT)`)
+      .join('%0A');
+    
+    const message = `Bonjour,%0A%0A` +
+      `Je souhaite passer une commande :%0A%0A` +
+      `*Nom complet :* ${firstName} ${lastName}%0A` +
+      `*Téléphone :* ${phone}%0A` +
+      `*Adresse :* ${address}%0A%0A` +
+      `*Détails de la commande :*%0A${itemsList}%0A%0A` +
+      `*Total : ${total.toFixed(3)} DT*%0A%0A` +
+      `Merci !`;
+
+    window.open(`https://wa.me/21652956361?text=${message}`, '_blank');
+    setShowOrderForm(false);
+  };
+
+  const subtotal = getTotalPrice();
   const shipping = subtotal > 100 ? 0 : 7;
   const total = subtotal + shipping;
 
@@ -56,7 +62,7 @@ const Cart = () => {
             <span className="gradient-text">Votre Panier</span>
           </h1>
 
-          {cartItems.length === 0 ? (
+          {cart.length === 0 ? (
             <Card className="p-16 bg-card/30 backdrop-blur-sm border-primary/20 text-center animate-scale-in">
               <ShoppingBag className="h-24 w-24 text-primary/40 mx-auto mb-6" />
               <h2 className="text-3xl font-black mb-4 text-foreground/60">
@@ -77,7 +83,7 @@ const Cart = () => {
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Cart Items */}
               <div className="lg:col-span-2 space-y-4">
-                {cartItems.map((item, index) => (
+                {cart.map((item, index) => (
                   <Card
                     key={item.id}
                     className="p-6 bg-card/30 backdrop-blur-sm border-primary/20 hover:border-primary/40 transition-all duration-300 animate-slide-in-left"
@@ -106,7 +112,7 @@ const Cart = () => {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => updateQuantity(item.id, -1)}
+                              onClick={() => handleUpdateQuantity(item.id, -1)}
                               className="h-8 w-8 hover:bg-primary/10"
                             >
                               <Minus className="h-4 w-4" />
@@ -117,7 +123,7 @@ const Cart = () => {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => updateQuantity(item.id, 1)}
+                              onClick={() => handleUpdateQuantity(item.id, 1)}
                               className="h-8 w-8 hover:bg-primary/10"
                             >
                               <Plus className="h-4 w-4" />
@@ -140,7 +146,7 @@ const Cart = () => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => handleRemoveItem(item.id)}
                         className="text-destructive hover:bg-destructive/10 h-10 w-10"
                       >
                         <Trash2 className="h-5 w-5" />
@@ -198,17 +204,25 @@ const Cart = () => {
                   <div className="flex justify-between items-center border-t border-primary/20 pt-4">
                     <span className="text-xl font-black text-foreground">Total</span>
                     <span className="text-3xl font-black gradient-text">
-                      {total.toFixed(2)} DT
+                      {total.toFixed(3)} DT
                     </span>
                   </div>
 
                   <Button
+                    onClick={() => setShowOrderForm(true)}
                     size="lg"
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg py-6 shadow-[var(--shadow-neon)] hover:shadow-[var(--shadow-glow)] transition-all duration-300"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-bold text-lg py-6 shadow-[var(--shadow-neon)] hover:shadow-[var(--shadow-glow)] transition-all duration-300"
                   >
+                    <MessageSquareText className="mr-2 h-5 w-5" />
                     Passer la commande
-                    <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
+                  
+                  {showOrderForm && (
+                    <OrderForm 
+                      onClose={() => setShowOrderForm(false)} 
+                      onSubmit={handleSubmitOrder} 
+                    />
+                  )}
 
                   <Button
                     size="lg"
@@ -220,27 +234,7 @@ const Cart = () => {
                   </Button>
                 </Card>
 
-                {/* Trust Badges */}
-                <Card className="p-6 bg-card/30 backdrop-blur-sm border-primary/20 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 bg-primary/10 rounded-xl">
-                      <ShoppingBag className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-foreground">Paiement sécurisé</p>
-                      <p className="text-sm text-foreground/60">100% sécurisé</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 bg-primary/10 rounded-xl">
-                      <ShoppingBag className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-foreground">Retour gratuit</p>
-                      <p className="text-sm text-foreground/60">Sous 14 jours</p>
-                    </div>
-                  </div>
-                </Card>
+                
               </div>
             </div>
           )}
