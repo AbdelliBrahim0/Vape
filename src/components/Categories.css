@@ -1,0 +1,49 @@
+@layer utilities {
+  .categories-mosaic-grid {
+    display: grid;
+    gap: 1.5rem; /* 24px */
+  }
+
+  /* Mobile Layout: Single Column */
+  @media (max-width: 767px) {
+    .categories-mosaic-grid {
+      grid-template-columns: 1fr;
+    }
+    .area-pods { aspect-ratio: 1 / 1; }
+    .area-vapes, .area-eliq { aspect-ratio: 4 / 3; }
+    .area-box, .area-atom, .area-diy { aspect-ratio: 16 / 9; }
+  }
+
+  /* Tablet Layout: 8 Columns */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .categories-mosaic-grid {
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(4, 150px);
+      grid-template-areas:
+        "vapes vapes vapes eliq eliq eliq eliq eliq"
+        "pods pods pods pods box box box box"
+        "pods pods pods pods atom atom atom atom"
+        "diy diy diy diy atom atom atom atom";
+    }
+  }
+
+  /* Desktop Layout: 12 Columns */
+  @media (min-width: 1280px) {
+    .categories-mosaic-grid {
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(4, 150px);
+      grid-template-areas:
+        "pods pods pods pods pods vapes vapes vapes vapes vapes vapes"
+        "pods pods pods pods pods eliq eliq eliq box box box box"
+        "pods pods pods pods pods atom atom atom diy diy diy diy"
+        "pods pods pods pods pods atom atom atom diy diy diy diy";
+    }
+  }
+
+  .area-vapes { grid-area: vapes; }
+  .area-eliq { grid-area: eliq; }
+  .area-pods { grid-area: pods; }
+  .area-box { grid-area: box; }
+  .area-atom { grid-area: atom; }
+  .area-diy { grid-area: diy; }
+}
