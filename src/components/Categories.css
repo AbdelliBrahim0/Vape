@@ -4,14 +4,43 @@
     gap: 1.5rem; /* 24px */
   }
 
-  /* Mobile Layout: Single Column */
+  /* Mobile Layout: 2 items par ligne */
   @media (max-width: 767px) {
     .categories-mosaic-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: 1fr;
+      gap: 0.75rem;
     }
-    .area-pods { aspect-ratio: 1 / 1; }
-    .area-vapes, .area-eliq { aspect-ratio: 4 / 3; }
-    .area-box, .area-atom, .area-diy { aspect-ratio: 16 / 9; }
+    
+    /* Taille égale pour toutes les cartes */
+    .categories-mosaic-grid > * {
+      aspect-ratio: 1 / 1;
+      min-height: 150px;
+    }
+    
+    /* Ajustement de la taille de la police pour les titres */
+    .categories-mosaic-grid h3 {
+      font-size: 1rem;
+    }
+    
+    .categories-mosaic-grid p {
+      font-size: 0.8rem;
+    }
+    
+    /* Ajustement du padding et de l'alignement */
+    .categories-mosaic-grid a {
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+    
+    /* Ajustement de la taille des icônes */
+    .categories-mosaic-grid svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
   }
 
   /* Tablet Layout: 8 Columns */

@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePageTransition } from '@/contexts/PageTransitionContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export const PageTransitionLoader = () => {
   const { isTransitioning, skipTransition, endTransition } = usePageTransition();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoError, setVideoError] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (isTransitioning && videoRef.current) {
@@ -47,6 +49,8 @@ export const PageTransitionLoader = () => {
     };
   }, [isTransitioning, handleMouseMove]);
 
+  const videoSrc = isMobile ? '/test/VDphone.webm' : '/test/vd.webm';
+
   return (
     <AnimatePresence>
       {isTransitioning && (
@@ -67,7 +71,7 @@ export const PageTransitionLoader = () => {
             ) : (
               <video
                 ref={videoRef}
-                src="/test/vd.webm"
+                src={videoSrc}
                 className="w-full h-full object-cover"
                 autoPlay
                 muted

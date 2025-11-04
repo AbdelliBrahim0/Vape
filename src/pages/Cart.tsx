@@ -89,7 +89,7 @@ const Cart = () => {
                     className="p-6 bg-card/30 backdrop-blur-sm border-primary/20 hover:border-primary/40 transition-all duration-300 animate-slide-in-left"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="flex gap-6">
+                    <div className="flex flex-col sm:flex-row gap-6">
                       {/* Image */}
                       <div className="relative w-32 h-32 flex-shrink-0 overflow-hidden rounded-xl border-2 border-primary/30">
                         <img

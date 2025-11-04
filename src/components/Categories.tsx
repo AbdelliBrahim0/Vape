@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Zap, Droplets, Puzzle, Box, Atom, FlaskConical } from 'lucide-react';
+import './Categories.css';
 
 
 const categoriesData = [
@@ -72,7 +73,7 @@ const cardVariants = {
 const CategoryCard = ({ category, index }: { category: (typeof categoriesData)[0]; index: number }) => {
   return (
     <motion.div
-      className={`area-${category.area}`}
+      className={`h-full`}
       variants={cardVariants}
       initial="hidden"
       whileInView="visible"
@@ -81,7 +82,7 @@ const CategoryCard = ({ category, index }: { category: (typeof categoriesData)[0
     >
       <Link
         to={category.href}
-        className="group relative flex h-full w-full flex-col justify-between overflow-hidden rounded-xl bg-gray-800/50 p-6 shadow-lg ring-1 ring-white/10 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+        className="group relative flex h-full w-full flex-col justify-between overflow-hidden rounded-xl bg-gray-800/50 p-4 md:p-6 shadow-lg ring-1 ring-white/10 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         aria-label={`Explorer la catégorie ${category.title}`}
       >
         <div className="relative z-10">
@@ -103,10 +104,17 @@ const CategoryCard = ({ category, index }: { category: (typeof categoriesData)[0
 
 export const Categories = () => {
   return (
-    <section className="bg-gray-900 py-20">
+    <section className="bg-gray-900 py-12 md:py-20">
       <div className="container mx-auto px-4">
-        <h2 className="mb-12 text-center text-4xl font-bold text-white">Explorez nos Catégories</h2>
-        <div className="categories-mosaic-grid">
+        <h2 className="mb-8 md:mb-12 text-center text-3xl md:text-4xl font-bold text-white">Explorez nos Catégories</h2>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:hidden">
+          {categoriesData.map((category, index) => (
+            <div key={category.id} className="aspect-square">
+              <CategoryCard category={category} index={index} />
+            </div>
+          ))}
+        </div>
+        <div className="hidden md:block categories-mosaic-grid">
           {categoriesData.map((category, index) => (
             <CategoryCard key={category.id} category={category} index={index} />
           ))}

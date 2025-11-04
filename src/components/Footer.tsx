@@ -73,9 +73,12 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-primary/20 mt-12 pt-8 text-center">
+        <div className="border-t border-primary/20 mt-12 pt-8 text-center space-y-4">
           <p className="text-foreground/60 font-semibold">
-            © 2024 NanoVapeLab. Tous droits réservés.
+            © 2025 NanoVapeLab. Tous droits réservés.
+          </p>
+          <p className="text-lg font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent font-['Dancing_Script']">
+            code by 3b2li || decode if you can
           </p>
         </div>
       </div>

@@ -1,14 +1,16 @@
-import { ShoppingCart, Menu, Search } from "lucide-react";
+import { ShoppingCart, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CustomLink } from "./CustomLink";
 import { usePageTransition } from '@/contexts/PageTransitionContext';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '@/contexts/CartContext';
+import { useState } from "react";
 
 export const Navbar = () => {
   const { startTransition } = usePageTransition();
   const navigate = useNavigate();
   const { getTotalItems } = useCart();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleHomeClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -54,14 +56,7 @@ export const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-3">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="rounded-full hover:bg-primary/10 transition-colors"
-            aria-label="Rechercher"
-          >
-            <Search className="h-5 w-5" />
-          </Button>
+
           <Button 
             variant="ghost" 
             size="icon" 
@@ -79,11 +74,30 @@ export const Navbar = () => {
             size="icon" 
             className="md:hidden rounded-full hover:bg-primary/10 transition-colors"
             aria-label="Menu"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <Menu className="h-5 w-5" />
           </Button>
         </div>
       </div>
+      {isMobileMenuOpen && (
+        <div className="md:hidden">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <CustomLink href="/" className="block px-3 py-2 rounded-md text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/10">
+              Accueil
+            </CustomLink>
+            <CustomLink href="/shop" className="block px-3 py-2 rounded-md text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/10">
+              Boutique
+            </CustomLink>
+            <CustomLink href="/about" className="block px-3 py-2 rounded-md text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/10">
+              À Propos
+            </CustomLink>
+            <CustomLink href="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-foreground/80 hover:text-primary hover:bg-primary/10">
+              Contact
+            </CustomLink>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

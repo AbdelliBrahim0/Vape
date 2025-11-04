@@ -170,9 +170,7 @@
 
 @media (max-width: 599px) {
   .card-grid {
-    grid-template-columns: 1fr;
-    width: 90%;
-    margin: 0 auto;
+    grid-template-columns: repeat(2, 1fr);
     padding: 0.5em;
   }
 
