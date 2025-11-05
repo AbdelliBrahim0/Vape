@@ -499,13 +499,7 @@ const Shop = () => {
                         <ShoppingCart className="w-4 h-4 mr-1" />
                         Ajouter
                       </Button>
-                      <Button 
-                        variant="outline"
-                        className="bg-background/80 hover:bg-background text-foreground font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500"
-                        onClick={() => window.location.href = `/product/${product.id}`}
-                      >
-                        Détails
-                      </Button>
+                      
                     </div>
                   </div>
 
