@@ -11,6 +11,7 @@ import { Star, ShoppingCart } from 'lucide-react';
 import { ProductShowcaseCarousel } from '@/components/product-showcase-carousel';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
+import VapeLogo from '@/assets/test/VapeLogo.png';
 
 // Données des produits (à importer depuis Shop.tsx dans un vrai projet)
 const allProducts = [
