@@ -454,14 +454,14 @@ const Shop = () => {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {currentProducts.map((product, index) => (
               <Card
                 key={product.id}
                 className="group relative overflow-hidden bg-card/50 backdrop-blur-sm border-primary/20 hover:border-primary/50 transition-all duration-500 animate-scale-in"
                 style={{ animationDelay: `${index * 0.05}s` }}
               >
-                <div className="relative h-64 overflow-hidden">
+                <div className="relative h-56 overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.name}
