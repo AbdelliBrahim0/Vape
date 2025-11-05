@@ -161,7 +161,7 @@ const Product = () => {
                     className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg shadow-[var(--shadow-neon)] hover:shadow-[var(--shadow-glow)] transition-all duration-300"
                   >
                     <ShoppingCart className="h-5 w-5 mr-2" />
-                    Ajouter au panier
+                    panier
                   </Button>
                   <Button
                     size="lg"

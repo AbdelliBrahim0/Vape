@@ -322,24 +322,7 @@ export function ProductShowcaseCarousel() {
             </motion.div>
           </div>
 
-          {/* Navigation Arrows */}
-          <motion.button
-            onClick={prevProduct}
-            className="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-black/50 backdrop-blur-sm rounded-full hover:bg-black/70 transition-colors duration-300 z-20"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ChevronLeft className="w-6 h-6 text-white" />
-          </motion.button>
 
-          <motion.button
-            onClick={nextProduct}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-black/50 backdrop-blur-sm rounded-full hover:bg-black/70 transition-colors duration-300 z-20"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ChevronRight className="w-6 h-6 text-white" />
-          </motion.button>
         </div>
 
         {/* Product Indicators */}

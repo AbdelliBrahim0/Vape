@@ -219,7 +219,7 @@ const Index = () => {
                             className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2"
                           >
                             <ShoppingCart className="w-4 h-4" />
-                            Ajouter au panier
+                            panier
                           </Button>
                         </div>
                       </div>
@@ -340,7 +340,7 @@ const Index = () => {
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2"
                     >
                       <ShoppingCart className="w-4 h-4" />
-                      Ajouter au panier
+                      panier
                     </Button>
                   </div>
                 </div>

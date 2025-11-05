@@ -407,7 +407,7 @@ export const FeaturedProducts = () => {
                         onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, image: product.image })}
                       >
                         <ShoppingCart className="h-4 w-4 mr-2" />
-                        Ajouter au panier
+                         panier
                       </Button>
                     </div>
 
