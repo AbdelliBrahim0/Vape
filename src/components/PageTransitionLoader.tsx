@@ -54,25 +54,22 @@ export const PageTransitionLoader = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoError, setVideoError] = useState(false);
   const isMobile = useIsMobile();
-  const [showTransition, setShowTransition] = useState(true);
-  const [dontShowAgain, setDontShowAgain] = useState(false);
+  const [hideTransition, setHideTransition] = useState(
+    () => localStorage.getItem('hideTransition') === 'true'
+  );
 
   useEffect(() => {
-    const storedPreference = localStorage.getItem('hideTransition');
-    if (storedPreference === 'true') {
-      setShowTransition(false);
-    }
-  }, []);
+    localStorage.setItem('hideTransition', hideTransition.toString());
+  }, [hideTransition]);
 
   const handleCheckboxChange = (e) => {
-    setDontShowAgain(e.target.checked);
-    localStorage.setItem('hideTransition', e.target.checked.toString());
+    setHideTransition(e.target.checked);
   };
 
   const videoSrc = isMobile ? VDphone : vd;
 
   useEffect(() => {
-    if (showTransition && isTransitioning && videoRef.current) {
+    if (!hideTransition && isTransitioning && videoRef.current) {
       videoRef.current.src = videoSrc;
       setVideoError(false);
       videoRef.current.currentTime = 0;
@@ -83,10 +80,10 @@ export const PageTransitionLoader = () => {
           setVideoError(true);
         });
       }
-    } else if (!showTransition && isTransitioning) {
+    } else if (hideTransition && isTransitioning) {
       endTransition();
     }
-  }, [isTransitioning, videoSrc, showTransition, endTransition]);
+  }, [isTransitioning, videoSrc, hideTransition, endTransition]);
 
   const handleVideoError = () => {
     console.error('Erreur de chargement de la vidéo');
@@ -98,7 +95,7 @@ export const PageTransitionLoader = () => {
     endTransition();
   };
 
-  if (!showTransition) {
+  if (hideTransition) {
     return null;
   }
 
@@ -129,10 +126,10 @@ export const PageTransitionLoader = () => {
             )}
           </div>
           {!isMobile && <CursorFollower />}
-          <div className={`absolute z-10 ${isMobile ? 'bottom-10 left-1/2 -translate-x-1/2' : 'bottom-5 right-5'} p-4 bg-black bg-opacity-40 backdrop-blur-md rounded-xl`}>
+          <div className={`absolute z-10 ${isMobile ? 'bottom-10 left-1/2 -translate-x-1/2 w-11/12 max-w-sm' : 'bottom-5 right-5'} p-4 bg-black bg-opacity-40 backdrop-blur-md rounded-xl`}>
             <div className="flex flex-col items-center space-y-3">
               {isMobile && <p className="text-gray-200 text-center font-semibold">cliquer n'importe où pour passer</p>}
-              <Checkbox checked={dontShowAgain} onChange={handleCheckboxChange} label="Ne plus afficher" />
+              <Checkbox checked={hideTransition} onChange={handleCheckboxChange} label="Ne plus afficher" />
             </div>
           </div>
         </motion.div>
